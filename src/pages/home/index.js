@@ -59,7 +59,7 @@ class Home extends Component {
   }
   render() {
     const { name, id } = this.props.route.params;
-    console.log(this.state.id);
+    console.log(id);
     return (
       <>
         <Container style={{ backgroundColor: '#9dbaed' }}>

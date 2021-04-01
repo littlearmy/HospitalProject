@@ -5,15 +5,11 @@ import {
   Text,
   Content,
   Form,
-  Picker,
-  Left,
   Icon,
-  Item,
-  Title,
-  ListItem,
 } from 'native-base';
 import axios from 'axios';
-import { Button, FlatList } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { Button } from 'react-native';
 
 class Service extends React.Component {
   constructor(props) {
@@ -21,8 +17,12 @@ class Service extends React.Component {
     this.state = {
       keluhan: [],
       selected: null,
-      doctor: '',
-      complaint_name: [],
+      room:[],
+      doctor:"",
+      user_id:null,
+      selectedRoom:null,
+      complaint_name:"",
+      price:null
     };
   }
   getComplaint() {
@@ -33,18 +33,35 @@ class Service extends React.Component {
         this.setState({ keluhan });
       });
   }
-  onValueChange = (value: string) => {
-    this.setState({
-      selected: value,
-    });
-  };
+  getRoom() {
+    axios
+      .get('https://hospital2021.000webhostapp.com/room.php')
+      .then((res) => {
+        const room = res.data.result;
+        this.setState({ room });
+      });
+  }
+  selectItem(){
+    var keluhan = this.state.selected;
+    var ruangan = this.state.selectedRoom;
+    var id = this.state.user_id;
+    if(keluhan == null || ruangan == null){
+      alert("Select An Option")
+    } else{
+      axios
+      .post('https://hospital2021.000webhostapp.com/addLayanan.php',JSON.stringify({complaint_id : keluhan, room_id : ruangan, user_id : id}),)
+      .then((res) => {
+        console.log(res);
+        alert(res.data.message);
+      })
+    }
 
+  }
   render = () => {
     const { id } = this.props.route.params;
+    this.state.user_id=id;
     this.getComplaint();
-    const selectItem = (item) => {
-      console.log(item);
-    }
+    this.getRoom();
     return (
       <Container>
         <Header />
@@ -58,28 +75,42 @@ class Service extends React.Component {
             style={{ alignSelf: 'center', fontSize: 24, fontWeight: 'bold' }}>
             Keluhan
           </Text>
-          <Form style={{ backgroundColor: 'white' }}>
-            <Item picker>
+          <Form style={{ backgroundColor: 'white', marginBottom:"5%"}}>
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 selectedValue={this.state.selected}
-                onValueChange={this.onValueChange.bind(this)}>
+                onValueChange={(itemValue,itemIndex) => this.setState({selected:itemValue})}>
+                  <Picker.Item label="Pilih Keluhan" value=""/>
                 {this.state.keluhan.map((keluhan) => {
-                  this.state.doctor = keluhan.doctor_name;
                   return (
                     <Picker.Item
                       label={keluhan.complaint_name}
-                      value={() => selectItem(keluhan)}
+                      value={keluhan.id}
                     />
                   );
                 })}
               </Picker>
-            </Item>
           </Form>
-          <Text style={{ marginTop: '5%', alignSelf: 'center' }}>
-            {this.state.doctor}
-          </Text>
+          <Form style={{ backgroundColor: 'white', marginBottom:"5%"}}>
+              <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="arrow-down" />}
+                selectedValue={this.state.selectedRoom}
+                onValueChange={(itemValue,itemIndex) => this.setState({selectedRoom:itemValue})}>
+                  <Picker.Item label="Pilih Ruangan" value=""/>
+                {this.state.room.map((room) => {
+                  return (
+                    <Picker.Item
+                      label={room.room_name}
+                      value={room.id}
+                    />
+                  );
+                })}
+              </Picker>
+          </Form>
+          
+          <Button title='Submit' onPress={()=>this.selectItem()}/>
         </Content>
       </Container>
     );

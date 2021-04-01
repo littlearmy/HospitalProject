@@ -24,9 +24,9 @@ class Login extends React.Component {
     user_id: '',
     pass: '',
     name: '',
-    id: '',
+    id: '', 
   };
-
+ 
   onChangeHandle(state, value) {
     this.setState({
       [state]: value,
@@ -90,7 +90,6 @@ class Login extends React.Component {
           </View>
           <Button
             style={{alignSelf:'center'}}
-            transparent
             onPress={() => this.doLogin()}>
             <Text
               style={{ color: 'black', fontWeight: 'bold'}}>

@@ -26,32 +26,26 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
-class detail_room extends Component {
+class detail_doctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: null,
-      id_status: 0,
-      status: 'kosong',
     };
   }
   getRoom() {}
   render() {
     const {
-      id,
-      room_type,
-      floor_id,
-      room_name,
-      status,
+      docId,
+        docName,
+        docPoly,
+        docDay,
+        docHours
     } = this.props.route.params;
-    if(status == 1){
-      this.state.status = 'Ada Isinya'
-    }
     return (
       <>
         <Container>
-          <Header />
-          <Content>
+          <Content >
             <Card style={styles.cardStyle}>
               <Body>
                 <Text
@@ -62,7 +56,7 @@ class detail_room extends Component {
                     marginTop: 20,
                     marginBottom: 40,
                   }}>
-                  {room_name}
+                  {docName}
                 </Text>
                 <Text
                   style={{
@@ -71,7 +65,16 @@ class detail_room extends Component {
                     marginBottom: 40,
                     fontSize: 17,
                   }}>
-                  {room_type}
+                  {docPoly}
+                </Text>
+                <Text
+                  style={{
+                    alignSelf: 'center',
+                    fontFamily: 'Roboto_medium',
+                    marginBottom: 10,
+                    fontSize: 20,
+                  }}>
+                  {docDay}
                 </Text>
                 <Text
                   style={{
@@ -79,7 +82,7 @@ class detail_room extends Component {
                     color: '#ff0019',
                     fontSize: 35,
                   }}>
-                  {this.state.status}
+                  {docHours}
                 </Text>
               </Body>
             </Card>
@@ -89,4 +92,4 @@ class detail_room extends Component {
     );
   }
 }
-export default detail_room;
+export default detail_doctor;
