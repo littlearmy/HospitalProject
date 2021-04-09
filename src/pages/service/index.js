@@ -45,13 +45,18 @@ class Service extends React.Component {
     var keluhan = this.state.selected;
     var ruangan = this.state.selectedRoom;
     var id = this.state.user_id;
+    const req = {
+      complaint_id : keluhan,
+      room_id : ruangan,
+      user_id : id
+    }
+    console.log('req = >',req)
     if(keluhan == null || ruangan == null){
       alert("Select An Option")
     } else{
       axios
-      .post('https://hospital2021.000webhostapp.com/addLayanan.php',JSON.stringify({complaint_id : keluhan, room_id : ruangan, user_id : id}),)
+      .post('https://hospital2021.000webhostapp.com/addLayanan.php',req)
       .then((res) => {
-        console.log(res);
         alert(res.data.message);
       })
     }
