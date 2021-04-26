@@ -16,7 +16,7 @@ import {
   Input,
   Label,
 } from 'native-base';
-import { AppStyles } from '../../AppStyle.js';
+import {AppStyles} from '../../AppStyle.js';
 import axios from 'axios';
 
 class Login extends React.Component {
@@ -24,20 +24,20 @@ class Login extends React.Component {
     user_id: '',
     pass: '',
     name: '',
-    id: '', 
+    id: '',
   };
- 
+
   onChangeHandle(state, value) {
     this.setState({
       [state]: value,
-    })
+    });
   }
   doLogin() {
-    const { user_id, pass } = this.state;
+    const {user_id, pass} = this.state;
     const req = {
       username: user_id,
       password: pass,
-    }
+    };
     axios
       .post(
         'https://hospital2021.000webhostapp.com/tampilLogin.php',
@@ -46,7 +46,7 @@ class Login extends React.Component {
           password: pass,
         }),
       )
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         if (res.data.success == 1) {
           this.state.name = res.data.name;
@@ -62,7 +62,7 @@ class Login extends React.Component {
       });
   }
   render = () => {
-    const { user_id, pass } = this.state;
+    const {user_id, pass} = this.state;
     return (
       <>
         <View style={styles.container}>
@@ -74,7 +74,7 @@ class Login extends React.Component {
               placeholderTextColor={AppStyles.color.grey}
               underlineColorAndroid="transparent"
               value={user_id}
-              onChangeText={(value) => this.onChangeHandle('user_id', value)}
+              onChangeText={value => this.onChangeHandle('user_id', value)}
             />
           </View>
           <View style={styles.InputContainer}>
@@ -83,18 +83,16 @@ class Login extends React.Component {
               secureTextEntry={true}
               placeholder="Password"
               value={pass}
-              onChangeText={(value) => this.onChangeHandle('pass', value)}
+              onChangeText={value => this.onChangeHandle('pass', value)}
               placeholderTextColor={AppStyles.color.grey}
               underlineColorAndroid="transparent"
             />
           </View>
           <Button
-            style={{alignSelf:'center'}}
+            transparent
+            style={{alignSelf: 'center'}}
             onPress={() => this.doLogin()}>
-            <Text
-              style={{ color: 'black', fontWeight: 'bold'}}>
-              LOG IN
-            </Text>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>LOG IN</Text>
           </Button>
         </View>
       </>
@@ -110,36 +108,36 @@ const styles = StyleSheet.create({
     fontFamily: 'Noto Sans',
     color: 'black',
     marginTop: 40,
-    marginBottom: 10
+    marginBottom: 10,
   },
   title: {
     fontSize: AppStyles.fontSize.title,
     fontWeight: 'bold',
     color: 'blue',
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   leftTitle: {
     alignSelf: 'stretch',
     textAlign: 'left',
-    marginLeft: '10%'
+    marginLeft: '10%',
   },
   content: {
     paddingLeft: 50,
     paddingRight: 50,
     textAlign: 'center',
     fontSize: AppStyles.fontSize.content,
-    color: AppStyles.color.text
+    color: AppStyles.color.text,
   },
   loginContainer: {
     width: AppStyles.buttonWidth.main,
     backgroundColor: AppStyles.color.tint,
     borderRadius: AppStyles.borderRadius.main,
     padding: 10,
-    marginTop: 30
+    marginTop: 30,
   },
   loginText: {
-    color: AppStyles.color.white
+    color: AppStyles.color.white,
   },
   placeholder: {
     fontFamily: 'Noto Sans',
@@ -151,24 +149,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: AppStyles.color.grey,
-    borderRadius: AppStyles.borderRadius.main
+    borderRadius: AppStyles.borderRadius.main,
   },
   body: {
     height: 42,
     paddingLeft: 20,
     paddingRight: 20,
-    color: AppStyles.color.text
+    color: AppStyles.color.text,
   },
   facebookContainer: {
     width: AppStyles.buttonWidth.main,
     backgroundColor: AppStyles.color.facebook,
     borderRadius: AppStyles.borderRadius.main,
     padding: 10,
-    marginTop: 30
+    marginTop: 30,
   },
   facebookText: {
-    color: AppStyles.color.white
-  }
+    color: AppStyles.color.white,
+  },
 });
 
 export default Login;

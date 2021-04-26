@@ -1,15 +1,8 @@
 import React from 'react';
-import {
-  Container,
-  Header,
-  Text,
-  Content,
-  Form,
-  Icon,
-} from 'native-base';
+import {Container, Header, Text, Content, Form, Icon} from 'native-base';
 import axios from 'axios';
-import { Picker } from '@react-native-picker/picker';
-import { Button } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import {Button} from 'react-native';
 
 class Service extends React.Component {
   constructor(props) {
@@ -17,54 +10,58 @@ class Service extends React.Component {
     this.state = {
       keluhan: [],
       selected: null,
-      room:[],
-      doctor:"",
-      user_id:null,
-      selectedRoom:null,
-      complaint_name:"",
-      price:null
+      room: [],
+      doctor: '',
+      user_id: null,
+      selectedRoom: null,
+      complaint_name: '',
+      price: null,
     };
   }
   getComplaint() {
     axios
       .get('https://hospital2021.000webhostapp.com/complaint.php')
-      .then((res) => {
+      .then(res => {
         const keluhan = res.data.result;
-        this.setState({ keluhan });
+        this.setState({keluhan});
       });
   }
   getRoom() {
-    axios
-      .get('https://hospital2021.000webhostapp.com/room.php')
-      .then((res) => {
-        const room = res.data.result;
-        this.setState({ room });
-      });
+    axios.get('https://hospital2021.000webhostapp.com/room.php').then(res => {
+      const room = res.data.result;
+      this.setState({room});
+    });
   }
-  selectItem(){
+  selectItem() {
     var keluhan = this.state.selected;
     var ruangan = this.state.selectedRoom;
     var id = this.state.user_id;
     const req = {
-      complaint_id : keluhan,
-      room_id : ruangan,
-      user_id : id
-    }
-    console.log('req = >',req)
-    if(keluhan == null || ruangan == null){
-      alert("Select An Option")
-    } else{
+      complaint_id: keluhan,
+      room_id: ruangan,
+      user_id: id,
+    };
+    console.log('req = >', req);
+    if (keluhan == null || ruangan == null) {
+      alert('Select An Option');
+    } else {
       axios
-      .post('https://hospital2021.000webhostapp.com/addLayanan.php',req)
-      .then((res) => {
-        alert(res.data.message);
-      })
+        .post(
+          'https://hospital2021.000webhostapp.com/addLayanan.php',
+          JSON.stringify({
+            complaint_id: keluhan,
+            room_id: ruangan,
+            user_id: id,
+          }),
+        )
+        .then(res => {
+          console.log(res);
+        });
     }
-
   }
   render = () => {
-    const { id } = this.props.route.params;
-    this.state.user_id=id;
+    const {id} = this.props.route.params;
+    this.state.user_id = id;
     this.getComplaint();
     this.getRoom();
     return (
@@ -76,46 +73,48 @@ class Service extends React.Component {
             marginRight: '10%',
             backgroundColor: '#9acddb',
           }}>
-          <Text
-            style={{ alignSelf: 'center', fontSize: 24, fontWeight: 'bold' }}>
+          <Text style={{alignSelf: 'center', fontSize: 24, fontWeight: 'bold'}}>
             Keluhan
           </Text>
-          <Form style={{ backgroundColor: 'white', marginBottom:"5%"}}>
-              <Picker
-                mode="dropdown"
-                iosIcon={<Icon name="arrow-down" />}
-                selectedValue={this.state.selected}
-                onValueChange={(itemValue,itemIndex) => this.setState({selected:itemValue})}>
-                  <Picker.Item label="Pilih Keluhan" value=""/>
-                {this.state.keluhan.map((keluhan) => {
-                  return (
-                    <Picker.Item
-                      label={keluhan.complaint_name}
-                      value={keluhan.id}
-                    />
-                  );
-                })}
-              </Picker>
+          <Form style={{backgroundColor: 'white', marginBottom: '5%'}}>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              selectedValue={this.state.selected}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({selected: itemValue})
+              }>
+              <Picker.Item label="Pilih Keluhan" value="" />
+              {this.state.keluhan.map(keluhan => {
+                return (
+                  <Picker.Item
+                    label={keluhan.complaint_name}
+                    value={keluhan.id}
+                  />
+                );
+              })}
+            </Picker>
           </Form>
-          <Form style={{ backgroundColor: 'white', marginBottom:"5%"}}>
-              <Picker
-                mode="dropdown"
-                iosIcon={<Icon name="arrow-down" />}
-                selectedValue={this.state.selectedRoom}
-                onValueChange={(itemValue,itemIndex) => this.setState({selectedRoom:itemValue})}>
-                  <Picker.Item label="Pilih Ruangan" value=""/>
-                {this.state.room.map((room) => {
-                  return (
-                    <Picker.Item
-                      label={room.room_name}
-                      value={room.id}
-                    />
-                  );
-                })}
-              </Picker>
+          <Form style={{backgroundColor: 'white', marginBottom: '5%'}}>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              selectedValue={this.state.selectedRoom}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({selectedRoom: itemValue})
+              }>
+              <Picker.Item label="Pilih Ruangan" value="" />
+              {this.state.room.map(room => {
+                return <Picker.Item label={room.room_name} value={room.id} />;
+              })}
+            </Picker>
           </Form>
-          
-          <Button title='Submit' onPress={()=>this.selectItem()}/>
+
+          <Button title="Submit" onPress={() => this.selectItem()} />
+          <Button
+            title="List"
+            onPress={() => this.props.navigation.navigate('ser_list')}
+          />
         </Content>
       </Container>
     );
