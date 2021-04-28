@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {
   Container,
   Header,
@@ -19,7 +19,8 @@ import {
   Row,
   Col,
 } from 'native-base';
-import { color } from 'react-native-reanimated';
+import {color} from 'react-native-reanimated';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,47 +48,62 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'roboto',
     marginTop: 33,
-  }
+  },
 });
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id:'',
-    }
-    
+      id: '',
+    };
+  }
+  logOut() {
+    const {name, id} = this.props.route.params;
+    var user_id = id;
+    axios
+      .post(
+        'https://hospital2021.000webhostapp.com/logOut.php',
+        JSON.stringify({
+          id: user_id,
+        }),
+      )
+      .then(res => {
+        console.log(res.data);
+        if (res.data.success == 1) {
+          this.props.navigation.navigate('Login');
+          alert(res.data.message);
+        } else {
+          alert(res.data.message);
+        }
+      });
   }
   render() {
-    const { name, id } = this.props.route.params;
+    const {name, id} = this.props.route.params;
     console.log(id);
     return (
       <>
-        <Container style={{ backgroundColor: '#9dbaed' }}>
+        <Container style={{backgroundColor: '#9dbaed'}}>
           <Header>
             <Left>
-              <Button
-                transparent
-                onPress={() => this.props.navigation.navigate('Login')}>
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  Log Out
-                </Text>
+              <Button transparent onPress={() => this.logOut()}>
+                <Text style={{color: 'red', fontWeight: 'bold'}}>Log Out</Text>
               </Button>
             </Left>
             <Right>
-              <Text style={{ alignSelf: 'center', color: 'white' }}>
-                {name}
-              </Text>
+              <Text style={{alignSelf: 'center', color: 'white'}}>{name}</Text>
               <Button transparent>
                 <Icon name="menu" />
               </Button>
             </Right>
           </Header>
-          <Content style={{ alignContent: 'stretch' }}>
+          <Content style={{alignContent: 'stretch'}}>
             <Grid>
               <Col>
                 <Row>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('Service',{id:id})}>
+                    onPress={() =>
+                      this.props.navigation.navigate('Service', {id: id})
+                    }>
                     <Card style={styles.cardStyle}>
                       <Image
                         source={require('../../public/image/service.png')}
